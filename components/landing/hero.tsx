@@ -1,10 +1,30 @@
+"use client"
+
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Sparkles, Star } from "lucide-react"
-import Link from "next/link"
 import { Particles } from "./particles"
 
 export function Hero() {
+  const handleSmoothScroll = (e: React.MouseEvent<HTMLButtonElement>, href: string) => {
+    e.preventDefault()
+    const targetId = href.replace('#', '')
+    const element = document.getElementById(targetId)
+    
+    if (element) {
+      // Calcular altura real del header
+      const header = document.querySelector('header')
+      const headerHeight = header ? header.offsetHeight : 80
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+      // Offset reducido para que la sección quede mejor posicionada (más arriba)
+      const offsetPosition = elementPosition - headerHeight + 80
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      })
+    }
+  }
   return (
     <section id="inicio" className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
       {/* Background with energy particles */}
@@ -42,19 +62,19 @@ export function Hero() {
 
             <div className="flex flex-col sm:flex-row gap-4 mt-8 justify-center lg:justify-start">
               <Button
-                asChild
                 size="lg"
                 className="bg-primary hover:bg-primary/80 text-primary-foreground px-8"
+                onClick={(e) => handleSmoothScroll(e, '#contacto')}
               >
-                <Link href="#contacto">Reservar Sesion</Link>
+                Reservar Sesion
               </Button>
               <Button
-                asChild
                 variant="outline"
                 size="lg"
                 className="border-primary/40 text-foreground hover:bg-primary/10 px-8 bg-transparent"
+                onClick={(e) => handleSmoothScroll(e, '#servicios')}
               >
-                <Link href="#servicios">Conocer Servicios</Link>
+                Conocer Servicios
               </Button>
             </div>
 
@@ -99,13 +119,6 @@ export function Hero() {
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 rounded-full border-2 border-primary/30 flex items-start justify-center p-2">
-          <div className="w-1 h-2 bg-primary/50 rounded-full" />
         </div>
       </div>
     </section>

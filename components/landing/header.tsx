@@ -16,6 +16,28 @@ const navItems = [
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
+  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault()
+    const targetId = href.replace('#', '')
+    const element = document.getElementById(targetId)
+    
+    if (element) {
+      // Calcular altura real del header
+      const header = document.querySelector('header')
+      const headerHeight = header ? header.offsetHeight : 80
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+      // Offset reducido para que la sección quede mejor posicionada (más arriba)
+      const offsetPosition = elementPosition - headerHeight + 80
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      })
+    }
+    
+    setIsMenuOpen(false)
+  }
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -30,13 +52,14 @@ export function Header() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             {navItems.map((item) => (
-              <Link
+              <a
                 key={item.href}
                 href={item.href}
-                className="text-muted-foreground hover:text-primary transition-colors text-sm tracking-wide"
+                onClick={(e) => handleSmoothScroll(e, item.href)}
+                className="text-muted-foreground hover:text-primary transition-colors text-sm tracking-wide cursor-pointer"
               >
                 {item.label}
-              </Link>
+              </a>
             ))}
             <a
               href="https://www.instagram.com/manos_deluzyamor/"
@@ -47,8 +70,15 @@ export function Header() {
             >
               <Instagram className="w-5 h-5" />
             </a>
-            <Button asChild size="sm" className="bg-primary hover:bg-primary/80 text-primary-foreground">
-              <Link href="#contacto">Contactar</Link>
+            <Button 
+              size="sm" 
+              className="bg-primary hover:bg-primary/80 text-primary-foreground"
+              onClick={(e) => {
+                e.preventDefault()
+                handleSmoothScroll(e as any, '#contacto')
+              }}
+            >
+              Contactar
             </Button>
           </nav>
 
@@ -67,17 +97,23 @@ export function Header() {
           <nav className="md:hidden py-4 border-t border-border bg-background/95">
             <div className="flex flex-col gap-4">
               {navItems.map((item) => (
-                <Link
+                <a
                   key={item.href}
                   href={item.href}
-                  onClick={() => setIsMenuOpen(false)}
-                  className="text-muted-foreground hover:text-primary transition-colors text-sm tracking-wide py-2"
+                  onClick={(e) => handleSmoothScroll(e, item.href)}
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm tracking-wide py-2 cursor-pointer"
                 >
                   {item.label}
-                </Link>
+                </a>
               ))}
-              <Button asChild className="mt-2 bg-primary hover:bg-primary/80 text-primary-foreground">
-                <Link href="#contacto" onClick={() => setIsMenuOpen(false)}>Reservar Sesion</Link>
+              <Button 
+                className="mt-2 bg-primary hover:bg-primary/80 text-primary-foreground"
+                onClick={(e) => {
+                  e.preventDefault()
+                  handleSmoothScroll(e as any, '#contacto')
+                }}
+              >
+                Reservar Sesion
               </Button>
             </div>
           </nav>

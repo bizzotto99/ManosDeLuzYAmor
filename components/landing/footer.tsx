@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import { Heart, Sparkles, Instagram } from "lucide-react"
 
@@ -10,6 +12,25 @@ const navLinks = [
 ]
 
 export function Footer() {
+  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault()
+    const targetId = href.replace('#', '')
+    const element = document.getElementById(targetId)
+    
+    if (element) {
+      // Calcular altura real del header
+      const header = document.querySelector('header')
+      const headerHeight = header ? header.offsetHeight : 80
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+      // Offset reducido para que la sección quede mejor posicionada (más arriba)
+      const offsetPosition = elementPosition - headerHeight + 80
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      })
+    }
+  }
   return (
     <footer className="relative border-t border-border bg-card/30">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
@@ -23,13 +44,14 @@ export function Footer() {
 
           <nav className="flex flex-wrap justify-center gap-6">
             {navLinks.map((link) => (
-              <Link
+              <a
                 key={link.href}
                 href={link.href}
-                className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                onClick={(e) => handleSmoothScroll(e, link.href)}
+                className="text-sm text-muted-foreground hover:text-primary transition-colors cursor-pointer"
               >
                 {link.label}
-              </Link>
+              </a>
             ))}
           </nav>
 

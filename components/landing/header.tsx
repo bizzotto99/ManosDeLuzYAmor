@@ -26,8 +26,13 @@ export function Header() {
       const header = document.querySelector('header')
       const headerHeight = header ? header.offsetHeight : 80
       const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
-      // Offset reducido para que la sección quede mejor posicionada (más arriba)
-      const offsetPosition = elementPosition - headerHeight + 80
+      
+      // Detectar si es mobile (menos de 768px = breakpoint md de Tailwind)
+      const isMobile = window.innerWidth < 768
+      
+      // Offset mayor en mobile para que quede más arriba
+      const offset = isMobile ? 120 : 80
+      const offsetPosition = elementPosition - headerHeight + offset
 
       window.scrollTo({
         top: offsetPosition,

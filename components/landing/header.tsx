@@ -30,8 +30,8 @@ export function Header() {
       // Detectar si es mobile (menos de 768px = breakpoint md de Tailwind)
       const isMobile = window.innerWidth < 768
       
-      // Offset mayor en mobile para que quede más arriba
-      const offset = isMobile ? 120 : 80
+      // Offset mucho mayor en mobile para que el título casi toque el nav
+      const offset = isMobile ? 180 : 80
       const offsetPosition = elementPosition - headerHeight + offset
 
       window.scrollTo({
